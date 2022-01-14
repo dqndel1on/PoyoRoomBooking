@@ -9,7 +9,7 @@ import "../node_modules/@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Int
 contract PoyoRoomBooking {
     using SafeMath for uint;
     uint public minimumAmount = 0;
-    uint public totalRooms = 5;
+    uint public totalRooms = 10;
     address payable public owner;
 
     AggregatorV3Interface internal priceFeed;
@@ -23,6 +23,7 @@ contract PoyoRoomBooking {
     mapping(uint => string) public motelBranches;
 
     struct roomStatus {
+        bool isOccupied;
         uint roomNumber;
         uint time;
         string usedBy;
@@ -52,7 +53,10 @@ contract PoyoRoomBooking {
 
     function checkIn(uint _roomNumber,string calldata _branchName,uint _time, string calldata _usedBy) public payable{
         // require(getConversionRate(msg.value) > minimumAmount,"The Amount must be greater than minimum amount!");?
+        require(_roomNumber >0 && _roomNumber <= totalRooms,"This room number does not exist.");
+        require(customers[_branchName][_roomNumber].isOccupied == false,"This room is already booked!");
         customers[_branchName][_roomNumber]=roomStatus({
+            isOccupied:true,
             roomNumber: _roomNumber,
             time: block.timestamp + _time,
             usedBy: _usedBy,
@@ -62,10 +66,13 @@ contract PoyoRoomBooking {
     }
 
     function checkOut(string calldata _branchName,uint _roomNumber) public {
+        require(_roomNumber >0 && _roomNumber <= 10,"This room number does not exist.");
         delete customers[_branchName][_roomNumber];  
+        customers[_branchName][_roomNumber].isOccupied=false;
     } 
 
     function getRoomStatus(string calldata _branchName,uint _roomNumber) public view returns(roomStatus memory) {
+        require(_roomNumber >0 && _roomNumber <= 10,"This room number does not exist.");
         return customers[_branchName][_roomNumber];
     }
 
