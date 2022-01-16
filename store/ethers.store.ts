@@ -1,23 +1,32 @@
+import Web3Modal from "web3modal";
 import { ethers } from 'ethers';
 import create from 'zustand'
 
 declare let window: any;
 
 type EthersType = {
-    accounts: string[],
+    accounts: string,
     contractAddress: string,
     setAccounts: (data) => void,
     requestAccounts: () => void,
-    checkMMConnection: () => void
+    checkMMConnection: () => void,
+    disconnectAccount: () => void
 }
 
-const useEthers = create<EthersType>((set, get) => ({
+export const useEthers = create<EthersType>((set, get) => ({
     contractAddress: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
-    accounts: [''],
+    accounts: '',
     setAccounts: (data) => set({ accounts: data }),
+    disconnectAccount: async () => { },
     requestAccounts: async () => {
-        const Accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        set({ accounts: Accounts })
+        const web3Modal = new Web3Modal({
+            cacheProvider: true, // optional
+        });
+        const instance = await web3Modal.connect();
+        const provider = new ethers.providers.Web3Provider(instance);
+        const signer = provider.getSigner();
+        await provider.send("eth_requestAccounts", []);
+        set({ accounts: await signer.getAddress() })
     },
     checkMMConnection: async () => {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -26,11 +35,9 @@ const useEthers = create<EthersType>((set, get) => ({
             if (accounts.length !== 0) {
                 void get().requestAccounts();
             } else {
-                set({ accounts })
+                set({ accounts: accounts[0] })
             }
 
         }
-    }
+    },
 }))
-
-export default useEthers;
