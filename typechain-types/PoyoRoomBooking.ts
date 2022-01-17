@@ -45,9 +45,9 @@ export type RoomStatusStructOutput = [
 
 export interface PoyoRoomBookingInterface extends utils.Interface {
   functions: {
-    "addBranch(uint256,string)": FunctionFragment;
-    "checkIn(uint256,string,uint256,string)": FunctionFragment;
-    "checkOut(string,uint256)": FunctionFragment;
+    "addBranch(uint256,uint256,string)": FunctionFragment;
+    "checkIn(uint256,uint256,string,uint256,string)": FunctionFragment;
+    "checkOut(string,uint256,uint256)": FunctionFragment;
     "customers(string,uint256)": FunctionFragment;
     "deleteBranch(uint256)": FunctionFragment;
     "getConversionRate(uint256)": FunctionFragment;
@@ -57,20 +57,21 @@ export interface PoyoRoomBookingInterface extends utils.Interface {
     "motelBranches(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "setMinimumAmount(uint256)": FunctionFragment;
-    "totalRooms()": FunctionFragment;
+    "totalBranches()": FunctionFragment;
+    "updateBranchDetails(uint256,string,uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
     functionFragment: "addBranch",
-    values: [BigNumberish, string]
+    values: [BigNumberish, BigNumberish, string]
   ): string;
   encodeFunctionData(
     functionFragment: "checkIn",
-    values: [BigNumberish, string, BigNumberish, string]
+    values: [BigNumberish, BigNumberish, string, BigNumberish, string]
   ): string;
   encodeFunctionData(
     functionFragment: "checkOut",
-    values: [string, BigNumberish]
+    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "customers",
@@ -106,8 +107,12 @@ export interface PoyoRoomBookingInterface extends utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "totalRooms",
+    functionFragment: "totalBranches",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateBranchDetails",
+    values: [BigNumberish, string, BigNumberish]
   ): string;
 
   decodeFunctionResult(functionFragment: "addBranch", data: BytesLike): Result;
@@ -143,7 +148,14 @@ export interface PoyoRoomBookingInterface extends utils.Interface {
     functionFragment: "setMinimumAmount",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "totalRooms", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "totalBranches",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateBranchDetails",
+    data: BytesLike
+  ): Result;
 
   events: {};
 }
@@ -176,13 +188,15 @@ export interface PoyoRoomBooking extends BaseContract {
 
   functions: {
     addBranch(
-      _id: BigNumberish,
+      _branchId: BigNumberish,
+      _totalRooms: BigNumberish,
       _branchName: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     checkIn(
       _roomNumber: BigNumberish,
+      _branchId: BigNumberish,
       _branchName: string,
       _time: BigNumberish,
       _usedBy: string,
@@ -191,6 +205,7 @@ export interface PoyoRoomBooking extends BaseContract {
 
     checkOut(
       _branchName: string,
+      _branchId: BigNumberish,
       _roomNumber: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -233,7 +248,13 @@ export interface PoyoRoomBooking extends BaseContract {
     motelBranches(
       arg0: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[string]>;
+    ): Promise<
+      [string, BigNumber, BigNumber] & {
+        branchName: string;
+        totalRooms: BigNumber;
+        branchId: BigNumber;
+      }
+    >;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -242,17 +263,26 @@ export interface PoyoRoomBooking extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    totalRooms(overrides?: CallOverrides): Promise<[BigNumber]>;
+    totalBranches(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    updateBranchDetails(
+      _branchId: BigNumberish,
+      _branchName: string,
+      _totalRooms: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
   addBranch(
-    _id: BigNumberish,
+    _branchId: BigNumberish,
+    _totalRooms: BigNumberish,
     _branchName: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   checkIn(
     _roomNumber: BigNumberish,
+    _branchId: BigNumberish,
     _branchName: string,
     _time: BigNumberish,
     _usedBy: string,
@@ -261,6 +291,7 @@ export interface PoyoRoomBooking extends BaseContract {
 
   checkOut(
     _branchName: string,
+    _branchId: BigNumberish,
     _roomNumber: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -300,7 +331,16 @@ export interface PoyoRoomBooking extends BaseContract {
 
   minimumAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
-  motelBranches(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+  motelBranches(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    [string, BigNumber, BigNumber] & {
+      branchName: string;
+      totalRooms: BigNumber;
+      branchId: BigNumber;
+    }
+  >;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -309,17 +349,26 @@ export interface PoyoRoomBooking extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  totalRooms(overrides?: CallOverrides): Promise<BigNumber>;
+  totalBranches(overrides?: CallOverrides): Promise<BigNumber>;
+
+  updateBranchDetails(
+    _branchId: BigNumberish,
+    _branchName: string,
+    _totalRooms: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   callStatic: {
     addBranch(
-      _id: BigNumberish,
+      _branchId: BigNumberish,
+      _totalRooms: BigNumberish,
       _branchName: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
     checkIn(
       _roomNumber: BigNumberish,
+      _branchId: BigNumberish,
       _branchName: string,
       _time: BigNumberish,
       _usedBy: string,
@@ -328,6 +377,7 @@ export interface PoyoRoomBooking extends BaseContract {
 
     checkOut(
       _branchName: string,
+      _branchId: BigNumberish,
       _roomNumber: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -367,7 +417,13 @@ export interface PoyoRoomBooking extends BaseContract {
     motelBranches(
       arg0: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<string>;
+    ): Promise<
+      [string, BigNumber, BigNumber] & {
+        branchName: string;
+        totalRooms: BigNumber;
+        branchId: BigNumber;
+      }
+    >;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -376,20 +432,29 @@ export interface PoyoRoomBooking extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    totalRooms(overrides?: CallOverrides): Promise<BigNumber>;
+    totalBranches(overrides?: CallOverrides): Promise<BigNumber>;
+
+    updateBranchDetails(
+      _branchId: BigNumberish,
+      _branchName: string,
+      _totalRooms: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {};
 
   estimateGas: {
     addBranch(
-      _id: BigNumberish,
+      _branchId: BigNumberish,
+      _totalRooms: BigNumberish,
       _branchName: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     checkIn(
       _roomNumber: BigNumberish,
+      _branchId: BigNumberish,
       _branchName: string,
       _time: BigNumberish,
       _usedBy: string,
@@ -398,6 +463,7 @@ export interface PoyoRoomBooking extends BaseContract {
 
     checkOut(
       _branchName: string,
+      _branchId: BigNumberish,
       _roomNumber: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -440,18 +506,27 @@ export interface PoyoRoomBooking extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    totalRooms(overrides?: CallOverrides): Promise<BigNumber>;
+    totalBranches(overrides?: CallOverrides): Promise<BigNumber>;
+
+    updateBranchDetails(
+      _branchId: BigNumberish,
+      _branchName: string,
+      _totalRooms: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     addBranch(
-      _id: BigNumberish,
+      _branchId: BigNumberish,
+      _totalRooms: BigNumberish,
       _branchName: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     checkIn(
       _roomNumber: BigNumberish,
+      _branchId: BigNumberish,
       _branchName: string,
       _time: BigNumberish,
       _usedBy: string,
@@ -460,6 +535,7 @@ export interface PoyoRoomBooking extends BaseContract {
 
     checkOut(
       _branchName: string,
+      _branchId: BigNumberish,
       _roomNumber: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -502,6 +578,13 @@ export interface PoyoRoomBooking extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    totalRooms(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    totalBranches(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    updateBranchDetails(
+      _branchId: BigNumberish,
+      _branchName: string,
+      _totalRooms: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
   };
 }

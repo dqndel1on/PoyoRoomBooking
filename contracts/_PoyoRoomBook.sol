@@ -9,8 +9,8 @@ import "../node_modules/@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Int
 contract PoyoRoomBooking {
     using SafeMath for uint;
     uint public minimumAmount = 0;
-    uint public totalRooms = 10;
     address payable public owner;
+    uint public totalBranches = 0 ;
 
     AggregatorV3Interface internal priceFeed;
 
@@ -20,7 +20,13 @@ contract PoyoRoomBooking {
     }
 
     mapping(string => mapping(uint => roomStatus) ) public customers;
-    mapping(uint => string) public motelBranches;
+    mapping(uint => branchDetails) public motelBranches;
+
+    struct branchDetails {
+        string branchName;
+        uint totalRooms;
+        uint branchId;
+    }
 
     struct roomStatus {
         bool isOccupied;
@@ -32,7 +38,7 @@ contract PoyoRoomBooking {
     }
 
     modifier onlyOwner() {
-        require(msg.sender == owner,"Only owner can do this task!");
+        require(msg.sender == owner,"You do not have permission to perform this task");
         _;
     }
 
@@ -51,11 +57,11 @@ contract PoyoRoomBooking {
         return tokenPriceInUsd;
     }
 
-    function checkIn(uint _roomNumber,string calldata _branchName,uint _time, string calldata _usedBy) public payable{
+    function checkIn(uint _roomNumber,uint _branchId,string calldata _branchName,uint _time, string calldata _usedBy) public payable{
         // require(getConversionRate(msg.value) > minimumAmount,"The Amount must be greater than minimum amount!");?
-        require(_roomNumber >0 && _roomNumber <= totalRooms,"This room number does not exist.");
+        require(_roomNumber >0 && _roomNumber <= motelBranches[_branchId].totalRooms,"This room number does not exist.");
         require(customers[_branchName][_roomNumber].isOccupied == false,"This room is already booked!");
-        customers[_branchName][_roomNumber]=roomStatus({
+        customers[_branchName][_roomNumber] = roomStatus({
             isOccupied:true,
             roomNumber: _roomNumber,
             time: block.timestamp + _time,
@@ -65,8 +71,8 @@ contract PoyoRoomBooking {
         });
     }
 
-    function checkOut(string calldata _branchName,uint _roomNumber) public {
-        require(_roomNumber >0 && _roomNumber <= 10,"This room number does not exist.");
+    function checkOut(string calldata _branchName, uint _branchId, uint _roomNumber) public {
+        require(_roomNumber >0 && _roomNumber <= motelBranches[_branchId].totalRooms,"This room number does not exist.");
         delete customers[_branchName][_roomNumber];  
         customers[_branchName][_roomNumber].isOccupied=false;
     } 
@@ -76,12 +82,25 @@ contract PoyoRoomBooking {
         return customers[_branchName][_roomNumber];
     }
 
+    function addBranch(uint _branchId,uint _totalRooms,string calldata _branchName) public onlyOwner {
+        motelBranches[_branchId] = branchDetails({
+            branchName:_branchName,
+            branchId:_branchId,
+            totalRooms:_totalRooms
+        });
+        totalBranches = totalBranches + 1;
+    }
 
-    function addBranch(uint _id,string calldata _branchName) public onlyOwner{
-        motelBranches[_id]=_branchName;
+    function updateBranchDetails(uint _branchId, string calldata _branchName, uint _totalRooms) public onlyOwner {
+    motelBranches[_branchId] = branchDetails({
+            branchName:_branchName,
+            branchId:_branchId,
+            totalRooms:_totalRooms
+        });
     }
 
     function deleteBranch(uint _id) public onlyOwner {
         delete motelBranches[_id];
+        totalBranches = totalBranches - 1;
     }
 }
