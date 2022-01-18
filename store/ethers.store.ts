@@ -5,7 +5,7 @@ import create from 'zustand'
 declare let window: any;
 
 type EthersType = {
-    accounts: string | boolean,
+    accounts: string,
     contractAddress: string,
     setAccounts: (data) => void,
     requestAccounts: () => void,
@@ -14,8 +14,8 @@ type EthersType = {
 }
 
 export const useEthers = create<EthersType>((set, get) => ({
-    contractAddress: '0x8A791620dd6260079BF849Dc5567aDC3F2FdC318',
-    accounts: false,
+    contractAddress: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',
+    accounts: '',
     setAccounts: (data) => set({ accounts: data }),
     disconnectAccount: async () => { },
     requestAccounts: async () => {
