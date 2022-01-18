@@ -2,6 +2,7 @@ import Head from 'next/head';
 import React from 'react';
 import AddBranch from '../components/AddBranch';
 import BranchListAdmin from '../components/BranchListAdmin';
+import CheckOut from '../components/CheckOut';
 import UpdateBranch from '../components/UpdateBranch';
 
 interface adminProps {}
@@ -14,6 +15,7 @@ const admin: React.FC<adminProps> = () => {
       </Head>
       <AddBranch />
       <UpdateBranch />
+      <CheckOut />
       <BranchListAdmin />
     </div>
   );
