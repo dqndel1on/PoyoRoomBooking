@@ -1,7 +1,11 @@
 import Head from 'next/head';
+import BranchCard from '../components/BranchCard';
 import LandingPage from '../components/LandingPage';
+import usePoyo from '../store/contract.store';
 
 export default function Home() {
+  const { branches } = usePoyo();
+
   return (
     <div>
       <Head>
@@ -10,6 +14,18 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <LandingPage />
+      <div className="px-20 container mx-auto">
+        <h1 className="font-black text-3xl">Branches</h1>
+        <h1>
+          Reason why all the branches look same is because they are located in parallel universe.
+          Trust me bruhh..!
+        </h1>
+      </div>
+      <div className="flex justify-between items-center flex-wrap my-10 container mx-auto px-20">
+        {branches.map((branch) => (
+          <BranchCard key={branch[0]} branch={branch} />
+        ))}
+      </div>
     </div>
   );
 }
