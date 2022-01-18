@@ -35,7 +35,7 @@ const ConnectButton: React.FC<ConnectButtonProps> = () => {
             }}
             className="cursor-pointer"
           />
-          <span className="mx-2">{accounts}</span>
+          <span className="mx-2">{accounts?.substring(0, 15)} ...</span>
         </>
       )}
       <button
