@@ -27,8 +27,8 @@ const config: HardhatUserConfig = {
   defaultNetwork: "matic",
   networks: {
     matic: {
-      url: 'https://polygon-mumbai.g.alchemy.com/v2/0YY_iAeBDz_rmRey_pttgSE0atghvtra', // Chain ID should match the hardhat network's chainid
-      accounts: [`c857be77df665e7c6280fa57d56ad9cbff2f8997e32c74064f3519530c0c7a5c`],
+      url: '', // Chain ID should match the hardhat network's chainid
+      accounts: [``],
     }
   },
   paths: {

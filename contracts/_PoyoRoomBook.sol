@@ -20,6 +20,7 @@ contract PoyoRoomBooking {
 
     mapping(string => mapping(uint => roomStatus) ) public customers;
     mapping(uint => branchDetails) public motelBranches;
+    mapping(address => uint256) public addressToAmountFunded;
 
     struct branchDetails {
         string branchName;
@@ -56,6 +57,7 @@ contract PoyoRoomBooking {
         require(getConversionRate(msg.value) > 0.1*10**18 ,"The Amount must be greater than minimum amount!");
         require(_roomNumber >0 && _roomNumber <= motelBranches[_branchId].totalRooms,"This room number does not exist.");
         require(customers[_branchName][_roomNumber].isOccupied == false,"This room is already in use!");
+        addressToAmountFunded[msg.sender] += msg.value;
         customers[_branchName][_roomNumber] = roomStatus({
             isOccupied:true,
             roomNumber: _roomNumber,
