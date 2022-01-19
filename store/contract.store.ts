@@ -59,6 +59,7 @@ const usePoyo = create<PoyoTypes>((set, get) => ({
             const signer = provider.getSigner()
             const contract = new ethers.Contract(get().contractAddress, Poyo.abi, signer)
             try {
+                console.log(contract)
                 const transaction = await contract.addBranch(data._branchId, data._totalRooms, data._branchName)
                 console.log(transaction)
                 await transaction.wait()
