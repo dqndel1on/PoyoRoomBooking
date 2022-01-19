@@ -9,7 +9,6 @@ type PoyoTypes = {
     contractAddress: string;
     electionStarted: boolean,
     owner: string,
-    minimumAmount: number,
     totalBranches: number,
     branchDetails: any,
     getInitialData: () => void,
@@ -27,7 +26,6 @@ const usePoyo = create<PoyoTypes>((set, get) => ({
     branchDetails: [],
     electionStarted: false,
     owner: '',
-    minimumAmount: 0,
     totalBranches: 0,
     contractAddress: '0xEE7483F02b8682f3Bb8c8fA596F4a26d5ffbf194',
     getBranches: async (_branchId: number) => {
@@ -103,11 +101,10 @@ const usePoyo = create<PoyoTypes>((set, get) => ({
             const contract = new ethers.Contract(get().contractAddress, Poyo.abi, provider)
             try {
                 console.log(contract)
-                const minimumAmount = Number(await contract.minimumAmount());
                 const owner = await contract.owner();
                 const totalBranches = Number(await contract.totalBranches());
-                console.log(minimumAmount, owner, totalBranches)
-                set({ minimumAmount, owner, totalBranches });
+                console.log(owner, totalBranches)
+                set({ owner, totalBranches });
             } catch (err) {
                 throw new Error(err.message)
             }
