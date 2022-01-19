@@ -6,7 +6,7 @@ interface BranchListAdminProps {}
 
 const BranchListAdmin: React.FC<BranchListAdminProps> = () => {
   const { branches } = usePoyo();
-
+  console.log(branches);
   return (
     <div className="mt-10">
       <h1 className="text-3xl font-black">List of Branches</h1>

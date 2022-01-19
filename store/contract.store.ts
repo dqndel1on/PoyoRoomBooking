@@ -45,6 +45,7 @@ const usePoyo = create<PoyoTypes>((set, get) => ({
                     const stringArray = branches.map(branch => JSON.stringify(branch));
                     const uniqueStringArray = new Set(stringArray);
                     const uniqueArray = Array.from(uniqueStringArray, data => JSON.parse(data));
+                    console.log(uniqueArray)
                     return { branches: uniqueArray }
                 })
             } catch (err) {
@@ -59,6 +60,7 @@ const usePoyo = create<PoyoTypes>((set, get) => ({
             const contract = new ethers.Contract(get().contractAddress, Poyo.abi, signer)
             try {
                 const transaction = await contract.addBranch(data._branchId, data._totalRooms, data._branchName)
+                console.log(transaction)
                 await transaction.wait()
                 get().getInitialData()
             } catch (err) {
