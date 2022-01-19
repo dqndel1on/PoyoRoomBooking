@@ -102,9 +102,11 @@ const usePoyo = create<PoyoTypes>((set, get) => ({
             const provider = new ethers.providers.Web3Provider(window.ethereum)
             const contract = new ethers.Contract(get().contractAddress, Poyo.abi, provider)
             try {
+                console.log(contract)
                 const minimumAmount = Number(await contract.minimumAmount());
                 const owner = await contract.owner();
                 const totalBranches = Number(await contract.totalBranches());
+                console.log(minimumAmount, owner, totalBranches)
                 set({ minimumAmount, owner, totalBranches });
             } catch (err) {
                 throw new Error(err.message)
