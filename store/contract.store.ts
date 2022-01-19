@@ -18,7 +18,7 @@ type PoyoTypes = {
     updateBranch: (data: { _branchId: number, _totalRooms: number, _branchName: string }) => void,
     deleteBranch: (_branchId: number) => void,
     getBranchDetails: (_branchId: number) => void,
-    checkIn: (data: { _valueInMatic: string, _roomNumber: number, _branchId: number, _branchName: string, _time: number, _usedBy: string }) => void,
+    checkIn: (data: { _account: string, _roomNumber: number, _branchId: number, _branchName: string, _time: number, _usedBy: string }) => void,
     checkOut: (data: { _branchName: string, _branchId: number, _roomNumber }) => void
 }
 
@@ -44,7 +44,6 @@ const usePoyo = create<PoyoTypes>((set, get) => ({
                     const stringArray = branches.map(branch => JSON.stringify(branch));
                     const uniqueStringArray = new Set(stringArray);
                     const uniqueArray = Array.from(uniqueStringArray, data => JSON.parse(data));
-                    console.log(uniqueArray)
                     return { branches: uniqueArray }
                 })
             } catch (err) {
@@ -58,9 +57,7 @@ const usePoyo = create<PoyoTypes>((set, get) => ({
             const signer = provider.getSigner()
             const contract = new ethers.Contract(get().contractAddress, Poyo.abi, signer)
             try {
-                console.log(contract)
                 const transaction = await contract.addBranch(data._branchId, data._totalRooms, data._branchName)
-                console.log(transaction)
                 await transaction.wait()
                 get().getInitialData()
             } catch (err) {
@@ -104,7 +101,6 @@ const usePoyo = create<PoyoTypes>((set, get) => ({
                 console.log(contract)
                 const owner = await contract.owner();
                 const totalBranches = Number(await contract.totalBranches());
-                console.log(owner, totalBranches)
                 set({ owner, totalBranches });
             } catch (err) {
                 throw new Error(err.message)
@@ -130,10 +126,9 @@ const usePoyo = create<PoyoTypes>((set, get) => ({
             const signer = provider.getSigner()
             const contract = new ethers.Contract(get().contractAddress, Poyo.abi, signer)
             try {
-                const { accounts } = useEthers()
                 const transaction = await contract.checkIn(data._roomNumber, data._branchId, data._branchName, data._time, data._usedBy, {
-                    from: accounts,
-                    value: ethers.utils.parseEther((Number(data._valueInMatic)).toString()).toHexString()
+                    from: data._account,
+                    value: ethers.utils.parseEther((Number(0.1)).toString()).toHexString()
                 })
                 await transaction.wait()
                 get().getInitialData()

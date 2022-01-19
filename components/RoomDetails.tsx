@@ -4,6 +4,7 @@ import { AiOutlineNumber } from 'react-icons/ai';
 import { FaBed } from 'react-icons/fa';
 import usePoyo from '../store/contract.store';
 import Poyo from '../artifacts/contracts/_PoyoRoomBook.sol/PoyoRoomBooking.json';
+import { useEthers } from '../store/ethers.store';
 
 interface RoomDetailsProps {
   roomNumber: number;
@@ -13,15 +14,15 @@ interface RoomDetailsProps {
 
 const RoomDetails: React.FC<RoomDetailsProps> = ({ roomNumber, branchId, branchName }) => {
   const [name, setName] = React.useState<string>('');
-  const [valueInMatic, setValueInMatic] = React.useState<string>('');
   const [days, setDays] = React.useState<number>(1);
   const [roomStatus, setRoomStatus] = React.useState<any>();
   const { checkIn, contractAddress, checkOut } = usePoyo();
+  const { accounts } = useEthers();
 
   const handleBookRoom = (e) => {
     e.preventDefault();
     checkIn({
-      _valueInMatic: valueInMatic,
+      _account: accounts,
       _roomNumber: roomNumber,
       _branchId: branchId,
       _branchName: branchName,
@@ -87,15 +88,6 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({ roomNumber, branchId, branchN
                 className="border ml-1 max-w-xs w-full text-black p-2"
               />
             </div>
-          </div>
-          <div>
-            <h1>Matic to pay</h1>
-            <input
-              value={valueInMatic}
-              onChange={(e) => setValueInMatic(e.target.value)}
-              required
-              className="border ml-1 max-w-xs w-full text-black p-2"
-            />
           </div>
           {roomStatus?.isOccupied ? (
             <div className="flex items-center justify-between mt-5 uppercase">
