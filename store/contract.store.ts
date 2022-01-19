@@ -29,7 +29,7 @@ const usePoyo = create<PoyoTypes>((set, get) => ({
     owner: '',
     minimumAmount: 0,
     totalBranches: 0,
-    contractAddress: '0x3C368B86AF00565Df7a3897Cfa9195B9434A59f9',
+    contractAddress: '0x2FfEa410B53DE84d04c3B55e52a0d53fcFD0146e',
     getBranches: async (_branchId: number) => {
         if (typeof window.ethereum !== 'undefined') {
             const web3Modal = new Web3Modal({

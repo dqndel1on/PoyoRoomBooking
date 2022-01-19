@@ -24,19 +24,22 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 
 const config: HardhatUserConfig = {
   solidity: "0.8.10",
+  defaultNetwork: "matic",
   networks: {
     matic: {
       url: 'https://polygon-mumbai.g.alchemy.com/v2/0YY_iAeBDz_rmRey_pttgSE0atghvtra', // Chain ID should match the hardhat network's chainid
       accounts: [`c857be77df665e7c6280fa57d56ad9cbff2f8997e32c74064f3519530c0c7a5c`],
     }
   },
-  gasReporter: {
-    enabled: process.env.REPORT_GAS !== undefined,
-    currency: "USD",
+  paths: {
+    sources: "./contracts",
+    tests: "./test",
+    cache: "./cache",
+    artifacts: "./artifacts"
   },
-  etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
-  },
+  mocha: {
+    timeout: 20000
+  }
 };
 
 export default config;
