@@ -58,21 +58,23 @@ contract PoyoRoomBooking {
     }
 
     function checkIn(uint _roomNumber,uint _branchId,string calldata _branchName,uint _time, string calldata _usedBy) public payable{
-        // require(getConversionRate(msg.value) > minimumAmount,"The Amount must be greater than minimum amount!");?
+        require(getConversionRate(msg.value) > 0.1*10**18 ,"The Amount must be greater than minimum amount!");
         require(_roomNumber >0 && _roomNumber <= motelBranches[_branchId].totalRooms,"This room number does not exist.");
-        require(customers[_branchName][_roomNumber].isOccupied == false,"This room is already booked!");
+        require(customers[_branchName][_roomNumber].isOccupied == false,"This room is already in use!");
         customers[_branchName][_roomNumber] = roomStatus({
             isOccupied:true,
             roomNumber: _roomNumber,
-            time: block.timestamp + _time,
+            time: block.timestamp + _time * 86400,
             usedBy: _usedBy,
             bookingAddress: msg.sender,
             branch: _branchName
         });
     }
 
-    function checkOut(string calldata _branchName, uint _branchId, uint _roomNumber) public {
+    function checkOut(string calldata _branchName, uint _branchId, uint _roomNumber) public{
         require(_roomNumber >0 && _roomNumber <= motelBranches[_branchId].totalRooms,"This room number does not exist.");
+        require((msg.sender == owner) || (msg.sender == customers[_branchName][_roomNumber].bookingAddress),"You do not have enough permission!");
+
         delete customers[_branchName][_roomNumber];  
         customers[_branchName][_roomNumber].isOccupied=false;
     } 
