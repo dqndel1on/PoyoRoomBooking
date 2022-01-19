@@ -2,6 +2,7 @@
   "_format": "hh-sol-artifact-1",
   "contractName": "PoyoRoomBooking",
   "sourceName": "contracts/_PoyoRoomBook.sol",
+  
   "abi": [
     {
       "inputs": [],
@@ -238,19 +239,6 @@
       "type": "function"
     },
     {
-      "inputs": [],
-      "name": "minimumAmount",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -290,19 +278,6 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "_amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "setMinimumAmount",
-      "outputs": [],
-      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
