@@ -53,10 +53,8 @@ export interface PoyoRoomBookingInterface extends utils.Interface {
     "getConversionRate(uint256)": FunctionFragment;
     "getLatestPrice()": FunctionFragment;
     "getRoomStatus(string,uint256)": FunctionFragment;
-    "minimumAmount()": FunctionFragment;
     "motelBranches(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
-    "setMinimumAmount(uint256)": FunctionFragment;
     "totalBranches()": FunctionFragment;
     "updateBranchDetails(uint256,string,uint256)": FunctionFragment;
   };
@@ -94,18 +92,10 @@ export interface PoyoRoomBookingInterface extends utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "minimumAmount",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "motelBranches",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "setMinimumAmount",
-    values: [BigNumberish]
-  ): string;
   encodeFunctionData(
     functionFragment: "totalBranches",
     values?: undefined
@@ -136,18 +126,10 @@ export interface PoyoRoomBookingInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "minimumAmount",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "motelBranches",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "setMinimumAmount",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "totalBranches",
     data: BytesLike
@@ -243,8 +225,6 @@ export interface PoyoRoomBooking extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[RoomStatusStructOutput]>;
 
-    minimumAmount(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     motelBranches(
       arg0: BigNumberish,
       overrides?: CallOverrides
@@ -257,11 +237,6 @@ export interface PoyoRoomBooking extends BaseContract {
     >;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
-
-    setMinimumAmount(
-      _amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
 
     totalBranches(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -329,8 +304,6 @@ export interface PoyoRoomBooking extends BaseContract {
     overrides?: CallOverrides
   ): Promise<RoomStatusStructOutput>;
 
-  minimumAmount(overrides?: CallOverrides): Promise<BigNumber>;
-
   motelBranches(
     arg0: BigNumberish,
     overrides?: CallOverrides
@@ -343,11 +316,6 @@ export interface PoyoRoomBooking extends BaseContract {
   >;
 
   owner(overrides?: CallOverrides): Promise<string>;
-
-  setMinimumAmount(
-    _amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
 
   totalBranches(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -412,8 +380,6 @@ export interface PoyoRoomBooking extends BaseContract {
       overrides?: CallOverrides
     ): Promise<RoomStatusStructOutput>;
 
-    minimumAmount(overrides?: CallOverrides): Promise<BigNumber>;
-
     motelBranches(
       arg0: BigNumberish,
       overrides?: CallOverrides
@@ -426,11 +392,6 @@ export interface PoyoRoomBooking extends BaseContract {
     >;
 
     owner(overrides?: CallOverrides): Promise<string>;
-
-    setMinimumAmount(
-      _amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     totalBranches(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -492,19 +453,12 @@ export interface PoyoRoomBooking extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    minimumAmount(overrides?: CallOverrides): Promise<BigNumber>;
-
     motelBranches(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
-
-    setMinimumAmount(
-      _amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
 
     totalBranches(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -564,19 +518,12 @@ export interface PoyoRoomBooking extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    minimumAmount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     motelBranches(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    setMinimumAmount(
-      _amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
 
     totalBranches(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

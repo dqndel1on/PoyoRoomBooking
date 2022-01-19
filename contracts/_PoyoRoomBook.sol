@@ -8,7 +8,6 @@ import "../node_modules/@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Int
 
 contract PoyoRoomBooking {
     using SafeMath for uint;
-    uint public minimumAmount = 0;
     address payable public owner;
     uint public totalBranches = 0 ;
 
@@ -40,10 +39,6 @@ contract PoyoRoomBooking {
     modifier onlyOwner() {
         require(msg.sender == owner,"You do not have permission to perform this task");
         _;
-    }
-
-    function setMinimumAmount(uint _amount) public {
-        minimumAmount = _amount * 10 ** 18;
     }
 
     function getLatestPrice() public view returns (uint) {
