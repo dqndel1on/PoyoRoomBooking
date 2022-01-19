@@ -2,6 +2,7 @@ import Web3Modal from "web3modal";
 import Poyo from '../artifacts/contracts/_PoyoRoomBook.sol/PoyoRoomBooking.json';
 import create from 'zustand'
 import { ethers } from 'ethers';
+import { useEthers } from "./ethers.store";
 
 declare let window: any;
 type PoyoTypes = {
@@ -17,7 +18,7 @@ type PoyoTypes = {
     updateBranch: (data: { _branchId: number, _totalRooms: number, _branchName: string }) => void,
     deleteBranch: (_branchId: number) => void,
     getBranchDetails: (_branchId: number) => void,
-    checkIn: (data: { _roomNumber: number, _branchId: number, _branchName: string, _time: number, _usedBy: string }) => void,
+    checkIn: (data: { _valueInMatic: string, _roomNumber: number, _branchId: number, _branchName: string, _time: number, _usedBy: string }) => void,
     checkOut: (data: { _branchName: string, _branchId: number, _roomNumber }) => void
 }
 
@@ -129,7 +130,11 @@ const usePoyo = create<PoyoTypes>((set, get) => ({
             const signer = provider.getSigner()
             const contract = new ethers.Contract(get().contractAddress, Poyo.abi, signer)
             try {
-                const transaction = await contract.checkIn(data._roomNumber, data._branchId, data._branchName, data._time, data._usedBy)
+                const { accounts } = useEthers()
+                const transaction = await contract.checkIn(data._roomNumber, data._branchId, data._branchName, data._time, data._usedBy, {
+                    from: accounts,
+                    value: ethers.utils.parseEther((Number(data._valueInMatic)).toString()).toHexString()
+                })
                 await transaction.wait()
                 get().getInitialData()
             } catch (err) {
