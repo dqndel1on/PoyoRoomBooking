@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import RoomDetails from '../../components/RoomDetails';
 import usePoyo from '../../store/contract.store';
+import Error from '../_error';
 
 interface BranchNameProps {}
 
@@ -15,10 +16,6 @@ const BranchName: React.FC<BranchNameProps> = () => {
       getBranchDetails(Number(router.query.slug));
     }
   }, [router.query.slug]);
-
-  if (!router.isFallback) {
-    return <div>Error</div>;
-  }
 
   return (
     <div>
