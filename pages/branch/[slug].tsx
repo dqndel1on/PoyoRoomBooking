@@ -15,6 +15,11 @@ const BranchName: React.FC<BranchNameProps> = () => {
       getBranchDetails(Number(router.query.slug));
     }
   }, [router.query.slug]);
+
+  if (!router.isFallback) {
+    return <div>Error</div>;
+  }
+
   return (
     <div>
       <Head>
